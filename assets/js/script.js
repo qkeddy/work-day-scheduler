@@ -47,13 +47,12 @@ function convertTime(time) {
 }
  
 
-
-currentDayEl.text(moment().format("MMM Do, YYYY"));
-console.log(moment().format("MMM Do, YYYY"));
-
-// setInterval(function () {
-//     currentDayEl.text(moment().format("MMM Do, YYYY"));
-// })
+/**
+ * Function to refresh the current date and time to be displayed in the header
+ */
+setInterval(function () {
+    currentDayEl.text(moment().format("MMM Do, YYYY - h:mm:ss a"));
+}, 1000)
 
 /**
  * Load current schedule from local storage
