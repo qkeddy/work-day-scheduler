@@ -1,5 +1,5 @@
 // Find elements on page
-const currentDayEl = $(".currentDay");
+const currentDayEl = $("#currentDay");
 const containerEl = $(".container");
 const buttonEl = $("button");   // We might have an issue declaring this here as the button has yet to be created. 
 
@@ -32,8 +32,7 @@ function buildSchedulerPage() {
     
     console.log("Schedule Page built");
     
-    // Kickoff automated schedule color coding
-    colorCodeSchedule();
+    
  }
 
  /**
@@ -45,7 +44,16 @@ function convertTime(time) {
 
 
     return convertedTime; 
- }
+}
+ 
+
+
+currentDayEl.text(moment().format("MMM Do, YYYY"));
+console.log(moment().format("MMM Do, YYYY"));
+
+// setInterval(function () {
+//     currentDayEl.text(moment().format("MMM Do, YYYY"));
+// })
 
 /**
  * Load current schedule from local storage
@@ -59,10 +67,11 @@ function loadSchedule() {
  * Function to color code the time block for past, present, and future based on the current time
  */
 function colorCodeSchedule() {
-    setInterval(function () {
-        console.log("Automated color coding initiated");
-    }
-    )
+    // setInterval(function () {
+    //     console.log("Automated color coding initiated");
+    // }
+    // )
+    console.log("Schedule color coded");
 
 }
 
@@ -75,14 +84,19 @@ buttonEl.on("click", function () {
 });
 
 
+
+
 /**
  * Initialization function
  */
 function init() {
 
     buildSchedulerPage();
+    
+    // Kickoff automated schedule color
+    colorCodeSchedule();
+    
     loadSchedule();
-
 }
 
 // Run initialization
