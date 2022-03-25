@@ -6,8 +6,6 @@ const buttonEl = $("button"); // We might have an issue declaring this here as t
 // Declare variables
 var workDayStart = "09:00";
 var workDayEnd = "17:00";
-var workDayMilitaryTime = [];
-var workDay12HourTime = [];
 var hoursInWorkDay = 0;
 var currentDay = 0; // Construct with moment.js
 
@@ -20,7 +18,10 @@ var currentDay = 0; // Construct with moment.js
 function buildSchedulerPage() {
     // Create an array of hours based upon workday start & end
     workDay = [];
-    convertTime();
+    timeArrays = convertTime();
+
+    console.log(timeArrays.workDay12HourTime);
+    console.log(timeArrays.workDayMilitaryTime);
 
     // Loop over each hour
 
@@ -35,35 +36,37 @@ function buildSchedulerPage() {
 
 /**
  * Converts from military time to 12-hour clock
- * @param {} time
+ * @param {}
  * @returns
  */
-function convertTime(time) {
+function convertTime() {
+    // Create object to hold the time arrays
+    const timeArrays = {
+        workDay12HourTime: [],
+        workDayMilitaryTime: [],
+    };
+
+    // Create the time arrays by looping over a range of numbers defined by the workday start and end time.
     for (
         let i = parseInt(workDayStart.split(":")[0]);
         i <= parseInt(workDayEnd.split(":"[0]));
         i++
     ) {
         // Load up the military time array
-        workDayMilitaryTime.push(i);
+        timeArrays.workDayMilitaryTime.push(i);
 
-        // Load up the 12 hour time array
+        // Load up the 12-hour time array
         if (i < 12) {
-            workDay12HourTime.push(i + " am");
+            timeArrays.workDay12HourTime.push(i + " am");
         } else if (i > 12) {
-            workDay12HourTime.push(i-12 + " pm");
+            timeArrays.workDay12HourTime.push(i - 12 + " pm");
         } else {
-            workDay12HourTime.push(12 + " pm");
+            timeArrays.workDay12HourTime.push(12 + " pm");
         }
-            
     }
 
-    // TODO Add methods to return the respective arrays
-
-    console.log(workDayMilitaryTime);
-    console.log(workDay12HourTime);
-
-    //return convertedTime;
+    // Return time arrays
+    return timeArrays;
 }
 
 /**
