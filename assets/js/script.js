@@ -16,20 +16,25 @@ var currentDay = 0; // Construct with moment.js
  * As the page will be dynamically built, an extended working day could be parameterized.
  */
 function buildSchedulerPage() {
-    // Create an array of hours based upon workday start & end
-    workDay = [];
+    // Create an array of hours based upon workday start & end times
     timeArrays = convertTime();
 
-    console.log(timeArrays.workDay12HourTime);
-    console.log(timeArrays.workDayMilitaryTime);
+    // Loop over each hour and add insert each hour as an element under the container
+    for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
+        const hour = timeArrays.workDay12HourTime[i];
+        // Create four elements for each row (hour in the work day)
+        const hourContainerA = $("<div>");
+        const hourContainerA1 = $("<div>").text(hour);
+        const hourContainerA2 = $("<textarea>");
+        const hourContainerA3 = $("<button>").text("Save");
 
-    // Loop over each hour
+        // Nest elements in each hourly container
+        containerEl.append(hourContainerA);
+        hourContainerA.append(hourContainerA1);
+        hourContainerA.append(hourContainerA2);
+        hourContainerA.append(hourContainerA3);
 
-    // Add hourly time block elements to page as rows
-
-    // To each row add the hour text
-    // To each row add text area block element to the current hour
-    // To each Add save button to the current hour
+    }
 
     console.log("Schedule Page built");
 }
