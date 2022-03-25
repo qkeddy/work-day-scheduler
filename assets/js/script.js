@@ -4,7 +4,7 @@ const containerEl = $(".container");
 const buttonEl = $("button"); // We might have an issue declaring this here as the button has yet to be created.
 
 // Declare variables
-var workDayStart = "09:00";
+var workDayStart = "08:00";
 var workDayEnd = "17:00";
 var hoursInWorkDay = 0;
 var currentDay = 0; // Construct with moment.js
@@ -21,22 +21,46 @@ function buildSchedulerPage() {
 
     // Loop over each hour and add insert each hour as an element under the container
     for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
-        const hour = timeArrays.workDay12HourTime[i];
-        // Create four elements for each row (hour in the work day)
-        const hourContainerA = $("<div>");
-        const hourContainerA1 = $("<div>").text(hour);
-        const hourContainerA2 = $("<textarea>");
-        const hourContainerA3 = $("<button>").text("Save");
+        const hoursStandard = timeArrays.workDay12HourTime[i];
+        const hoursMilitary = timeArrays.workDayMilitaryTime[i];
+        // Create four elements for each row (hour in the work day) and add classes for visual styling as well as attribute ID to find the text in a particular hour.
+        const hourContainerA = $("<div>")
+            .attr("id", hoursMilitary)
+            .addClass("row");
+        const hourContainerA1 = $("<div>")
+            .addClass("col-1 hour")
+            .text(hoursStandard);
+        const hourContainerA2 = $("<textarea>").addClass(
+            "col-10 textarea past description").val(`Text Value ${i + 1}`)
+        ;
+        const hourContainerA3 = $("<button>").addClass(
+            "col-1 saveBtn i:hover fas fa-save"
+        );
 
-        // Nest elements in each hourly container
+        // Nest elements in each hourly container and build out
         containerEl.append(hourContainerA);
         hourContainerA.append(hourContainerA1);
         hourContainerA.append(hourContainerA2);
         hourContainerA.append(hourContainerA3);
-
     }
 
     console.log("Schedule Page built");
+
+
+    // *** Testing ***
+
+      const textInputEl = $(".textarea");
+
+      for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
+          const hoursMilitary = timeArrays.workDayMilitaryTime[i];
+        //   localStorage.setItem(
+        //       `"${hoursMilitary}", "rowEl.children().eq(1).value")`
+        //   );
+          //console.log(rowEl.children().eq(1).val());
+          console.log(textInputEl[i].value);
+      }
+
+      console.log("Save text in a time block to local storage");
 }
 
 /**
@@ -103,6 +127,22 @@ function colorCodeSchedule() {
  * Function (CLICK) to respond to a click event in a particular time and save to local storage the text that was entered.
  */
 buttonEl.on("click", function () {
+    // loop through the military time array and write any data to local storage
+
+    // Create an array of hours based upon workday start & end times
+    timeArrays = convertTime();
+
+    // Isolate each row
+    const rowEl = $(".row");
+
+    for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
+        const hoursMilitary = timeArrays.workDayMilitaryTime[i];
+        localStorage.setItem(
+            `"${hoursMilitary}", "rowEl.children().eq(1).value")`
+        );
+        console.log(rowEl.children().eq(1).value);
+    }
+
     console.log("Save text in a time block to local storage");
 });
 
