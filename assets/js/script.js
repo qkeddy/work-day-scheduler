@@ -6,7 +6,6 @@ const containerEl = $(".container");
 var workDayStart = "07:00";
 var workDayEnd = "17:00";
 var hoursInWorkDay = 0;
-var currentDay = 0; // Construct with moment.js
 
 
 /**
@@ -39,7 +38,8 @@ function buildSchedulerPage() {
             .addClass("col-1 hour")
             .text(hoursStandard);
         const textInputEl = $("<textarea>")
-            .addClass("col-10 textarea past description")
+            .attr("id", hoursMilitary)
+            .addClass("col-10 textarea past description");
         const saveEl = $("<button>")
             .addClass("col-1 saveBtn i:hover fas fa-save");
 
@@ -112,10 +112,30 @@ function loadSchedule() {
  * Function to color code the time block for past, present, and future based on the current time
  */
 function colorCodeSchedule() {
-    // setInterval(function () {
-    //     console.log("Automated color coding initiated");
-    // }
-    // )
+    // Create an array of hours based upon workday start & end times
+    timeArrays = convertTime();
+
+    // Isolate each row
+    const textInputEl = $(".textarea");
+
+    // Set the current hour
+    currHour = parseInt(moment().format("h"));
+
+    // Loop over each row element
+    textInputEl.each(function () {
+        // Convert ID to integer for comparison
+        rowHour = parseInt($(this).attr("id"));
+
+        // Set color coding based upon the time. Assumes the default color scheme uses the "past" class upon page load.
+        if (rowHour === currHour) {
+            $(this).removeClass("past");
+            $(this).addClass("present");
+        } else if (rowHour > currHour) {
+            $(this).removeClass("present");
+            $(this).addClass("future");
+        }
+    });
+
     console.log("Schedule color coded");
 }
 
@@ -124,21 +144,24 @@ function colorCodeSchedule() {
  * Initialization function
  */
 function init() {
-    // Update time in header
-    setInterval(displayTime, 1000);
+    // Display time as soon as the page loads
+    displayTime();
 
     // Build schedule based upon settings
     buildSchedulerPage();
 
+    // Load any existing schedules from local storage
+    loadSchedule();
+
     // Kickoff automated schedule color
     colorCodeSchedule();
 
-    // Load any existing schedules from local storage
-    loadSchedule();
-}
+    // Update time in header via setInterval
+    setInterval(displayTime, 1000);
 
-// Display time as soon as the page loads
-displayTime();
+    // Color code schedule via setInterval
+    setInterval(colorCodeSchedule, 3600000);
+}
 
 // Run init routine
 init();
@@ -170,4 +193,3 @@ buttonEl.on("click", function (event) {
 
     console.log("Input text in the respective hourly blocks has been saved to local storage");
 });
-
