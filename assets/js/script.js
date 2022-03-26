@@ -9,6 +9,16 @@ var workDayEnd = "17:00";
 var hoursInWorkDay = 0;
 var currentDay = 0; // Construct with moment.js
 
+
+/**
+ * Function to refresh the current date and time to be displayed in the header
+ */
+function displayTime() {
+    var rightNow = moment().format("MMM Do, YYYY - h:mm:ss a");
+    currentDayEl.text(rightNow);
+}
+
+
 /**
  * Function to build the page with the following components
  * -- Add current date to header
@@ -24,43 +34,38 @@ function buildSchedulerPage() {
         const hoursStandard = timeArrays.workDay12HourTime[i];
         const hoursMilitary = timeArrays.workDayMilitaryTime[i];
         // Create four elements for each row (hour in the work day) and add classes for visual styling as well as attribute ID to find the text in a particular hour.
-        const hourContainerA = $("<div>")
+        const hourRowContainerEl = $("<div>")
             .attr("id", hoursMilitary)
             .addClass("row");
-        const hourContainerA1 = $("<div>")
-            .addClass("col-1 hour")
-            .text(hoursStandard);
-        const hourContainerA2 = $("<textarea>").addClass(
-            "col-10 textarea past description").val(`Text Value ${i + 1}`)
-        ;
-        const hourContainerA3 = $("<button>").addClass(
+        const hourEl = $("<div>").addClass("col-1 hour").text(hoursStandard);
+        const textInputEl = $("<textarea>")
+            .addClass("col-10 textarea past description")
+            .val(`Text Value ${i + 1}`);
+        const saveEl = $("<button>").addClass(
             "col-1 saveBtn i:hover fas fa-save"
         );
 
         // Nest elements in each hourly container and build out
-        containerEl.append(hourContainerA);
-        hourContainerA.append(hourContainerA1);
-        hourContainerA.append(hourContainerA2);
-        hourContainerA.append(hourContainerA3);
+        containerEl.append(hourRowContainerEl);
+        hourRowContainerEl.append(hourEl, textInputEl, saveEl);
     }
 
     console.log("Schedule Page built");
 
-
     // *** Testing ***
 
-      const textInputEl = $(".textarea");
+    const textInputEl = $(".textarea");
 
-      for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
-          const hoursMilitary = timeArrays.workDayMilitaryTime[i];
+    for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
+        const hoursMilitary = timeArrays.workDayMilitaryTime[i];
         //   localStorage.setItem(
         //       `"${hoursMilitary}", "rowEl.children().eq(1).value")`
         //   );
-          //console.log(rowEl.children().eq(1).val());
-          console.log(textInputEl[i].value);
-      }
+        //console.log(rowEl.children().eq(1).val());
+        console.log(textInputEl[i].value);
+    }
 
-      console.log("Save text in a time block to local storage");
+    console.log("Save text in a time block to local storage");
 }
 
 /**
@@ -98,12 +103,6 @@ function convertTime() {
     return timeArrays;
 }
 
-/**
- * Function to refresh the current date and time to be displayed in the header
- */
-setInterval(function () {
-    currentDayEl.text(moment().format("MMM Do, YYYY - h:mm:ss a"));
-}, 1000);
 
 /**
  * Load current schedule from local storage
@@ -150,6 +149,9 @@ buttonEl.on("click", function () {
  * Initialization function
  */
 function init() {
+    // Update time in header
+    setInterval(displayTime, 1000);
+
     buildSchedulerPage();
 
     // Kickoff automated schedule color
@@ -159,4 +161,9 @@ function init() {
 }
 
 // Run initialization
+
+// Display time as soon as the page loads
+displayTime();
+
+// Run init routine
 init();
