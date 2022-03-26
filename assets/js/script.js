@@ -5,7 +5,6 @@ const containerEl = $(".container");
 // Declare variables
 var workDayStart = "07:00";
 var workDayEnd = "17:00";
-var hoursInWorkDay = 0;
 
 
 /**
