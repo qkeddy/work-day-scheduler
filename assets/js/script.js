@@ -119,7 +119,7 @@ function colorCodeSchedule() {
     const textInputEl = $(".textarea");
 
     // Set the current hour
-    currHour = parseInt(moment().format("h"));
+    currHour = parseInt(moment().format("H"));
 
     // Loop over each row element
     textInputEl.each(function () {
