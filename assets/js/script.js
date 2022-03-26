@@ -1,10 +1,9 @@
 // Find elements on page
 const currentDayEl = $("#currentDay");
 const containerEl = $(".container");
-const buttonEl = $("button"); // We might have an issue declaring this here as the button has yet to be created.
 
 // Declare variables
-var workDayStart = "08:00";
+var workDayStart = "07:00";
 var workDayEnd = "17:00";
 var hoursInWorkDay = 0;
 var currentDay = 0; // Construct with moment.js
@@ -52,20 +51,13 @@ function buildSchedulerPage() {
 
     console.log("Schedule Page built");
 
-    // *** Testing ***
+    // TODO REMOVE - loading some dummy data
+    // const textInputEl = $(".textarea");
 
-    const textInputEl = $(".textarea");
+    // for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
+    //     console.log(textInputEl[i].value);
+    // }
 
-    for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
-        const hoursMilitary = timeArrays.workDayMilitaryTime[i];
-        //   localStorage.setItem(
-        //       `"${hoursMilitary}", "rowEl.children().eq(1).value")`
-        //   );
-        //console.log(rowEl.children().eq(1).val());
-        console.log(textInputEl[i].value);
-    }
-
-    console.log("Save text in a time block to local storage");
 }
 
 /**
@@ -74,6 +66,7 @@ function buildSchedulerPage() {
  * @returns
  */
 function convertTime() {
+    // TODO - Look into changing this to moment.js - this can be replaced with a few lines of code.
     // Create object to hold the time arrays
     const timeArrays = {
         workDay12HourTime: [],
@@ -122,28 +115,6 @@ function colorCodeSchedule() {
     console.log("Schedule color coded");
 }
 
-/**
- * Function (CLICK) to respond to a click event in a particular time and save to local storage the text that was entered.
- */
-buttonEl.on("click", function () {
-    // loop through the military time array and write any data to local storage
-
-    // Create an array of hours based upon workday start & end times
-    timeArrays = convertTime();
-
-    // Isolate each row
-    const rowEl = $(".row");
-
-    for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
-        const hoursMilitary = timeArrays.workDayMilitaryTime[i];
-        localStorage.setItem(
-            `"${hoursMilitary}", "rowEl.children().eq(1).value")`
-        );
-        console.log(rowEl.children().eq(1).value);
-    }
-
-    console.log("Save text in a time block to local storage");
-});
 
 /**
  * Initialization function
@@ -152,11 +123,13 @@ function init() {
     // Update time in header
     setInterval(displayTime, 1000);
 
+    // Build schedule based upon settings
     buildSchedulerPage();
 
     // Kickoff automated schedule color
     colorCodeSchedule();
 
+    // Load any existing schedules from local storage
     loadSchedule();
 }
 
@@ -167,3 +140,33 @@ displayTime();
 
 // Run init routine
 init();
+
+
+/**
+ * Function (CLICK) to respond to a click event in a particular time row and then 
+ * save to local storage the text that was entered. The variable buttonEl needs to 
+ * be initialized after the page is built.
+ */
+const buttonEl = $("button");
+
+buttonEl.on("click", function (event) {
+    event.preventDefault();
+
+    // Create an array of hours based upon workday start & end times
+    timeArrays = convertTime();
+
+    // Isolate each input areas
+    const textInputEl = $(".textarea");
+
+    for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
+        const hoursMilitary = timeArrays.workDayMilitaryTime[i];
+        localStorage.setItem(
+            `"${hoursMilitary}"`,
+            `"${textInputEl[i].value}"`
+        );
+        console.log(textInputEl[i].value);
+    }
+
+    console.log("Input text in the respective hourly blocks has been saved to local storage");
+});
+
