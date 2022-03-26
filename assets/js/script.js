@@ -34,15 +34,14 @@ function buildSchedulerPage() {
         const hoursMilitary = timeArrays.workDayMilitaryTime[i];
         // Create four elements for each row (hour in the work day) and add classes for visual styling as well as attribute ID to find the text in a particular hour.
         const hourRowContainerEl = $("<div>")
-            .attr("id", hoursMilitary)
             .addClass("row");
-        const hourEl = $("<div>").addClass("col-1 hour").text(hoursStandard);
+        const hourEl = $("<div>")
+            .addClass("col-1 hour")
+            .text(hoursStandard);
         const textInputEl = $("<textarea>")
             .addClass("col-10 textarea past description")
-            .val(`Text Value ${i + 1}`);
-        const saveEl = $("<button>").addClass(
-            "col-1 saveBtn i:hover fas fa-save"
-        );
+        const saveEl = $("<button>")
+            .addClass("col-1 saveBtn i:hover fas fa-save");
 
         // Nest elements in each hourly container and build out
         containerEl.append(hourRowContainerEl);
@@ -50,14 +49,6 @@ function buildSchedulerPage() {
     }
 
     console.log("Schedule Page built");
-
-    // TODO REMOVE - loading some dummy data
-    // const textInputEl = $(".textarea");
-
-    // for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
-    //     console.log(textInputEl[i].value);
-    // }
-
 }
 
 /**
@@ -101,7 +92,20 @@ function convertTime() {
  * Load current schedule from local storage
  */
 function loadSchedule() {
-    console.log("Schedule page loaded");
+    // Create an array of hours based upon workday start & end times
+    timeArrays = convertTime();
+
+    // Isolate each input areas
+    const textInputEl = $(".textarea");
+
+    for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
+        const hoursMilitary = timeArrays.workDayMilitaryTime[i];
+
+        // Set the value of the respective text input to the value in local storage.
+        textInputEl[i].value = localStorage.getItem(`${hoursMilitary}`);
+    }
+    
+    console.log("Existing schedules loaded");
 }
 
 /**
@@ -133,8 +137,6 @@ function init() {
     loadSchedule();
 }
 
-// Run initialization
-
 // Display time as soon as the page loads
 displayTime();
 
@@ -161,10 +163,9 @@ buttonEl.on("click", function (event) {
     for (let i = 0; i < timeArrays.workDay12HourTime.length; i++) {
         const hoursMilitary = timeArrays.workDayMilitaryTime[i];
         localStorage.setItem(
-            `"${hoursMilitary}"`,
-            `"${textInputEl[i].value}"`
+            `${hoursMilitary}`,
+            `${textInputEl[i].value}`
         );
-        console.log(textInputEl[i].value);
     }
 
     console.log("Input text in the respective hourly blocks has been saved to local storage");
