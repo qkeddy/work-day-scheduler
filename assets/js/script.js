@@ -38,7 +38,7 @@ function buildSchedulerPage() {
             .text(hoursStandard);
         const textInputEl = $("<textarea>")
             .attr("id", hoursMilitary)
-            .addClass("col-10 textarea past description");
+            .addClass("col-10 textarea description");
         const saveEl = $("<button>")
             .addClass("col-1 saveBtn i:hover fas fa-save");
 
@@ -125,8 +125,11 @@ function colorCodeSchedule() {
         // Convert ID to integer for comparison
         rowHour = parseInt($(this).attr("id"));
 
-        // Set color coding based upon the time. Assumes the default color scheme uses the "past" class upon page load.
-        if (rowHour === currHour) {
+        // Set color coding based upon the current time.
+        if (rowHour < currHour) {
+            $(this).removeClass("present");
+            $(this).addClass("past");
+        } else if (rowHour === currHour) {
             $(this).removeClass("past");
             $(this).addClass("present");
         } else if (rowHour > currHour) {
