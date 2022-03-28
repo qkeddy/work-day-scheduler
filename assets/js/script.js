@@ -4,7 +4,7 @@ const containerEl = $(".container");
 
 // Declare variables
 var workDayStart = "07:00";
-var workDayEnd = "17:00";
+var workDayEnd = "19:00";
 
 
 /**
@@ -130,7 +130,7 @@ function colorCodeSchedule() {
             $(this).removeClass("present");
             $(this).addClass("past");
         } else if (rowHour === currHour) {
-            $(this).removeClass("past");
+            $(this).removeClass("future");
             $(this).addClass("present");
         } else if (rowHour > currHour) {
             $(this).removeClass("present");
@@ -162,7 +162,7 @@ function init() {
     setInterval(displayTime, 1000);
 
     // Color code schedule via setInterval
-    setInterval(colorCodeSchedule, 3600000);
+    setInterval(colorCodeSchedule, 1000);
 }
 
 // Run init routine
