@@ -13,7 +13,7 @@ There are no installation requirements except to open the single `index.html` pa
 
 ## Sample Usage
 
-The following GIF showcases a question being asked and selection of multiple choice answers. 
+The following image is a static image of the scheduler.
 
 ![alt text](./assets/images/work-day-scheduler-sample.png)
 
